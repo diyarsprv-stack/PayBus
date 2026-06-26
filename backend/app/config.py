@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "paybus-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    SMS_PROVIDER: str = "console"  # "console" yoki "isms"
+    SMS_PROVIDER: str = "console"  # "console", "telegram", "isms"
+    TELEGRAM_BOT_TOKEN: str = ""
     ISMS_API_KEY: str = ""
     ISMS_API_URL: str = "https://isms.uz/gateway/services/send.php"
 

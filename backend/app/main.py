@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, payment, bus
+from app.api import auth, payment, bus, telegram
 from app.database import engine, Base
 
 app = FastAPI(
@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(payment.router)
 app.include_router(bus.router)
+app.include_router(telegram.router)
 
 
 @app.on_event("startup")

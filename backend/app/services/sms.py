@@ -15,6 +15,8 @@ class SMSService:
         return str(random.randint(100000, 999999))
 
     async def send_sms(self, phone_number: str, code: str) -> bool:
+        if self.provider == "telegram":
+            return await self._send_via_telegram(phone_number, code)
         if self.provider == "isms" and self.api_key:
             return await self._send_via_isms(phone_number, code)
         return self._send_via_console(phone_number, code)
@@ -22,6 +24,15 @@ class SMSService:
     def _send_via_console(self, phone_number: str, code: str) -> bool:
         print(f"[SMS] {phone_number} -> Tasdiqlash kodi: {code}")
         return True
+
+    async def _send_via_telegram(self, phone_number: str, code: str) -> bool:
+        from app.api.telegram import phone_chat_map
+        chat_id = phone_chat_map.get(phone_number)
+        if not chat_id:
+            print(f"[Telegram] {phone_number} uchun chat_id topilmadi")
+            return self._send_via_console(phone_number, code)
+        from app.services.telegram import telegram_service
+        return await telegram_service.send_code(chat_id, code)
 
     async def _send_via_isms(self, phone_number: str, code: str) -> bool:
         clean_number = phone_number.replace(" ", "")
