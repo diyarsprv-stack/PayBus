@@ -12,8 +12,10 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "paybus-secret-key-change-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    SMS_SERVICE_API_KEY: str = ""
-    SMS_SERVICE_URL: str = "https://sms-provider.uz/api/send"
+    SMS_PROVIDER: str = "console"  # "console" yoki "playmobile"
+    PLAYMOBILE_LOGIN: str = ""
+    PLAYMOBILE_PASSWORD: str = ""
+    PLAYMOBILE_ORIGINATOR: str = "PayBus"
 
     # Payment provider credentials
     UZCARD_MERCHANT_ID: str = ""

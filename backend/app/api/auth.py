@@ -20,11 +20,9 @@ async def send_code(request: SendSMSRequest, db: AsyncSession = Depends(get_db))
     code = sms_service.generate_code()
     sms_codes[request.phone_number] = code
 
-    # Test rejimi: SMS yuborilmasa ham kodni qaytarish
     await sms_service.send_sms(request.phone_number, code)
-    print(f"[SMS kod] {request.phone_number} -> {code}")
 
-    return {"message": "SMS kod yuborildi", "code": code}
+    return {"message": "SMS kod yuborildi"}
 
 
 @router.post("/verify-code", response_model=TokenResponse)

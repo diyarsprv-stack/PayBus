@@ -14,6 +14,7 @@ from app.services.uzcard import uzcard_service
 from app.services.humo import humo_service
 from app.services.click import click_service
 from app.services.payme import payme_service
+from app.services.sms import sms_service
 
 router = APIRouter(prefix="/api/payment", tags=["payment"])
 
@@ -47,8 +48,8 @@ async def send_card_verify_code(request: AddCardRequest, user: User = Depends(ge
         "provider": request.provider
     }
     MOCK_BALANCES[request.card_number] = MOCK_BALANCE_DEFAULT
-    print(f"[Karta tasdiqlash] {user.phone_number} -> kod: {code}")
-    return {"message": "Karta egasining telefon raqamiga SMS kod yuborildi", "code": code}
+    await sms_service.send_sms(user.phone_number, code)
+    return {"message": "Karta egasining telefon raqamiga SMS kod yuborildi"}
 
 
 @router.post("/verify-card-code", response_model=CardResponse)
