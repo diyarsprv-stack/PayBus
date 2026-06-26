@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PayBus</string>
+    <string name="nav_profile">Profil</string>
+    <string name="nav_map">Harita</string>
+    <string name="nav_settings">Sozlamalar</string>
+    <string name="my_cards">Mening kartalarim</string>
+    <string name="add_card">Yangi karta qo\'shish</string>
+    <string name="transactions">Tranzaksiyalar tarixi</string>
+    <string name="logout">Chiqish</string>
+    <string name="edit_name">Ismni tahrirlash</string>
+    <string name="save">Saqlash</string>
+    <string name="cancel">Bekor qilish</string>
+    <string name="settings_language">Til sozlamalari</string>
+    <string name="settings_theme">Kun/Tun rejimi</string>
+    <string name="language_uz">O\'zbekcha</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_en">English</string>
+    <string name="about">Dastur haqida</string>
+    <string name="app_version">PayBus v1.0</string>
+    <string name="app_desc">Toshkent shahar avtobuslari uchun to\'lov tizimi</string>
+    <string name="nearby_buses">Yaqin kelayotgan avtobuslar</string>
+    <string name="my_location">Mening joylashuvim</string>
+    <string name="default_card">Asosiy</string>
+    <string name="delete">O\'chirish</string>
+    <string name="phone_hint">+998901234567</string>
+</resources>
