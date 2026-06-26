@@ -37,4 +37,4 @@ async def shutdown():
 
 @app.get("/")
 async def root():
-    return {"message": "PayBus API ishlayapti", "version": "1.0.0"}
+    return {"message": "PayBus API ishlayapti", "version": "1.0.0", "status": "ready"}
