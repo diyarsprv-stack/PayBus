@@ -113,10 +113,10 @@
                         android:id="@+id/etPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="+998 90 123 45 67"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:paddingVertical="12dp" />
+                        android:paddingVertical="12dp"
+                        android:placeholderText="+998 90 123 45 67" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton

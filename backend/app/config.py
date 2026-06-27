@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     TELEGRAM_BOT_TOKEN: str = ""
 
+    # Eskiz.uz SMS credentials
+    ESKIZ_EMAIL: str = ""
+    ESKIZ_PASSWORD: str = ""
+    ESKIZ_FROM: str = "4546"
+
     # Payment provider credentials
     UZCARD_MERCHANT_ID: str = ""
     UZCARD_SECRET_KEY: str = ""
