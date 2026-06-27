@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,14 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.paybus.R;
 import com.paybus.adapter.BusArrivalAdapter;
@@ -49,9 +44,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment {
 
-    private GoogleMap mMap;
+    private WebView webView;
     private FusedLocationProviderClient fusedLocationClient;
     private SessionManager session;
     private ReminderManager reminderManager;
@@ -84,6 +79,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         reminderManager = new ReminderManager(requireContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
+        webView = view.findViewById(R.id.mapWebView);
         fabLocation = view.findViewById(R.id.fabLocation);
         busStopPanel = view.findViewById(R.id.busStopPanel);
         busRoutePanel = view.findViewById(R.id.busRoutePanel);
@@ -109,12 +105,33 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         rvBusArrivals.setLayoutManager(new LinearLayoutManager(getContext()));
         rvRouteStops.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fabLocation.setOnClickListener(v -> moveToCurrentLocation());
+        setupWebView();
+        setupListeners();
 
+        loadCards();
+
+        return view;
+    }
+
+    private void setupWebView() {
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.addJavascriptInterface(new PayBusBridge(), "PayBusBridge");
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                requestLocationPermission();
+            }
+        });
+        webView.loadUrl("file:///android_asset/map.html");
+    }
+
+    private void setupListeners() {
+        fabLocation.setOnClickListener(v -> moveToCurrentLocation());
         btnClosePanel.setOnClickListener(v -> hideAllPanels());
         btnBackToStop.setOnClickListener(v -> showStopPanel());
         btnBackToRoute.setOnClickListener(v -> showRoutePanel());
-
         btnPayRoute.setOnClickListener(v -> showPaymentPanel());
 
         btnDecrement.setOnClickListener(v -> {
@@ -130,37 +147,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
 
         btnConfirmPay.setOnClickListener(v -> makePayment());
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
-
-        loadCards();
-
-        return view;
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-
-        mMap.setOnMarkerClickListener(marker -> {
-            String stopId = (String) marker.getTag();
-            if (stopId != null) {
+    private class PayBusBridge {
+        @JavascriptInterface
+        public void onStopClick(final String stopId, final String name, final String address) {
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
                 selectedStopId = stopId;
-                String title = marker.getTitle();
-                String snippet = marker.getSnippet();
-                fetchArrivals(stopId, title, snippet);
-            }
-            return true;
-        });
-
-        requestLocationPermission();
+                fetchArrivals(stopId, name, address);
+            });
+        }
     }
 
     private void fetchNearbyStops(double lat, double lng) {
@@ -171,8 +168,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onResponse(Call<PayBusApi.NearbyStopsResponse> call,
                                    Response<PayBusApi.NearbyStopsResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().stops != null) {
+                    webView.evaluateJavascript("clearStopMarkers();", null);
                     for (PayBusApi.BusStop stop : response.body().stops) {
-                        addBusStopMarker(stop.id, stop.lat, stop.lng, stop.name, stop.address);
+                        addBusStopMarkerJS(stop.id, stop.lat, stop.lng, stop.name, stop.address);
                     }
                 }
             }
@@ -184,6 +182,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
+    }
+
+    private void addBusStopMarkerJS(String id, double lat, double lng, String name, String address) {
+        webView.evaluateJavascript(
+            "addStopMarker('" + id + "', " + lat + ", " + lng + ", '" + escapeJS(name) + "', '" + escapeJS(address) + "');",
+            null
+        );
+    }
+
+    private String escapeJS(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace("'", "\\'").replace("\n", "\\n");
     }
 
     private void fetchArrivals(String stopId, String name, String address) {
@@ -221,22 +231,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-    }
-
-    private void addBusStopMarker(String id, double lat, double lng, String name, String address) {
-        LatLng position = new LatLng(lat, lng);
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(position)
-                .title(name)
-                .snippet(address)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        if (marker != null) {
-            marker.setTag(id);
-        }
-    }
-
-    private void showBusStopInfo(String stopId, String name, String address) {
-        fetchArrivals(stopId, name, address);
     }
 
     private void showStopPanel() {
@@ -397,16 +391,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             if (location != null) {
                 double lat = location.getLatitude();
                 double lng = location.getLongitude();
-                LatLng current = new LatLng(lat, lng);
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, 15f));
-                mMap.addMarker(new MarkerOptions()
-                        .position(current)
-                        .title("Sizning joylashuvingiz")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                webView.evaluateJavascript("setUserLocation(" + lat + ", " + lng + ");", null);
                 fetchNearbyStops(lat, lng);
             } else {
-                LatLng tashkent = new LatLng(41.2995, 69.2401);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(tashkent, 13f));
+                webView.evaluateJavascript("map.setView([41.2995, 69.2401], 13);", null);
                 fetchNearbyStops(41.2995, 69.2401);
                 Toast.makeText(getContext(), "Joylashuv topilmadi, Toshkent markazi ko'rsatilmoqda", Toast.LENGTH_SHORT).show();
             }

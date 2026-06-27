@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>PayBus Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+* { margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; }
+#map { height: 100%; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+var map = L.map('map').setView([41.2995, 69.2401], 13);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+var userMarker = null;
+var stopMarkers = [];
+
+function setUserLocation(lat, lng) {
+    if (userMarker) map.removeLayer(userMarker);
+    userMarker = L.marker([lat, lng], {
+        icon: L.divIcon({
+            className: 'user-marker',
+            html: '<div style="background:#1565C0;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3)"></div>',
+            iconSize: [26, 26],
+            iconAnchor: [13, 13]
+        })
+    }).addTo(map).bindPopup('Sizning joylashuvingiz');
+    map.setView([lat, lng], 15);
+}
+
+function addStopMarker(id, lat, lng, name, address) {
+    var marker = L.marker([lat, lng], {
+        icon: L.divIcon({
+            className: 'stop-marker',
+            html: '<div style="background:#fff;width:14px;height:14px;border-radius:50%;border:3px solid #1565C0;box-shadow:0 1px 4px rgba(0,0,0,0.3)"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        })
+    }).addTo(map).bindPopup('<b>' + name + '</b><br/>' + (address || ''));
+    marker.on('click', function() {
+        if (window.PayBusBridge) {
+            PayBusBridge.onStopClick(id, name, address || '');
+        }
+    });
+    marker._stopId = id;
+    stopMarkers.push(marker);
+}
+
+function clearStopMarkers() {
+    stopMarkers.forEach(function(m) { map.removeLayer(m); });
+    stopMarkers = [];
+}
+
+function getCenter() {
+    return { lat: map.getCenter().lat, lng: map.getCenter().lng };
+}
+</script>
+</body>
+</html>
