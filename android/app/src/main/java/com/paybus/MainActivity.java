@@ -84,12 +84,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openTelegramBot() {
-        String phone = etPhone.getText().toString().trim();
-        if (phone.isEmpty()) {
-            Toast.makeText(this, "Telefon raqamni kiriting", Toast.LENGTH_SHORT).show();
-            return;
+        String phone = session.getPhoneNumber();
+        if (phone == null) {
+            phone = etPhone.getText().toString().trim();
+            if (phone.isEmpty()) {
+                Toast.makeText(this, "Telefon raqamni kiriting", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            session.savePhoneNumber(phone);
         }
-        session.savePhoneNumber(phone);
         btnTelegramLogin.setEnabled(false);
 
         PayBusApi api = ApiClient.getApi();
@@ -98,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<PayBusApi.TelegramCodeResponse> call, Response<PayBusApi.TelegramCodeResponse> response) {
                 btnTelegramLogin.setEnabled(true);
                 if (response.isSuccessful() && response.body() != null && response.body().sent) {
-                    tvCodeSentTo.setText("Kod Telegram orqali yuborildi: " + phone);
-                    showCodeStep();
+                    Toast.makeText(MainActivity.this, "Kod Telegram orqali yuborildi", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/PayBus_bot"));
                     startActivity(intent);

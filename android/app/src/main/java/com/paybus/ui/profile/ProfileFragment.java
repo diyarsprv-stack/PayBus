@@ -33,7 +33,7 @@ import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
-    private TextView tvName, tvPhone;
+    private TextView tvName, tvPhone, tvEmptyCards, tvEmptyTransactions;
     private RecyclerView rvCards, rvTransactions;
     private Button btnAddCard, btnLogout;
     private ImageButton btnEditProfile;
@@ -47,6 +47,8 @@ public class ProfileFragment extends Fragment {
 
         tvName = view.findViewById(R.id.tvProfileName);
         tvPhone = view.findViewById(R.id.tvProfilePhone);
+        tvEmptyCards = view.findViewById(R.id.tvEmptyCards);
+        tvEmptyTransactions = view.findViewById(R.id.tvEmptyTransactions);
         rvCards = view.findViewById(R.id.rvCards);
         rvTransactions = view.findViewById(R.id.rvTransactions);
         btnAddCard = view.findViewById(R.id.btnAddCard);
@@ -103,10 +105,15 @@ public class ProfileFragment extends Fragment {
         api.getCards(token).enqueue(new Callback<List<CardResponse>>() {
             @Override
             public void onResponse(Call<List<CardResponse>> call, Response<List<CardResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     CardAdapter adapter = new CardAdapter(response.body());
                     adapter.setContext(getContext());
                     rvCards.setAdapter(adapter);
+                    rvCards.setVisibility(View.VISIBLE);
+                    tvEmptyCards.setVisibility(View.GONE);
+                } else {
+                    rvCards.setVisibility(View.GONE);
+                    tvEmptyCards.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -125,8 +132,13 @@ public class ProfileFragment extends Fragment {
         api.getTransactions(token).enqueue(new Callback<List<TransactionResponse>>() {
             @Override
             public void onResponse(Call<List<TransactionResponse>> call, Response<List<TransactionResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     rvTransactions.setAdapter(new TransactionAdapter(response.body()));
+                    rvTransactions.setVisibility(View.VISIBLE);
+                    tvEmptyTransactions.setVisibility(View.GONE);
+                } else {
+                    rvTransactions.setVisibility(View.GONE);
+                    tvEmptyTransactions.setVisibility(View.VISIBLE);
                 }
             }
 

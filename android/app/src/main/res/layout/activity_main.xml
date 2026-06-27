@@ -120,31 +120,6 @@
                     android:textSize="15sp"
                     app:cornerRadius="14dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@color/divider" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingBottom="8dp"
-                    android:text="Yoki"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnTelegramLogin"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="Telegram orqali kirish"
-                    android:textSize="15sp"
-                    app:cornerRadius="14dp"
-                    app:icon="@drawable/ic_telegram"
-                    app:iconGravity="textStart" />
             </LinearLayout>
 
             <!-- Step 2: Code verification -->
@@ -239,6 +214,23 @@
                     android:text="Kodni qayta yuborish"
                     android:textColor="@color/primary"
                     android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="@color/divider" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTelegramLogin"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Kodni Telegramda olish"
+                    android:textSize="15sp"
+                    app:cornerRadius="14dp"
+                    app:icon="@drawable/ic_telegram"
+                    app:iconGravity="textStart" />
             </LinearLayout>
 
         </LinearLayout>
