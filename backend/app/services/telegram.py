@@ -34,6 +34,21 @@ class TelegramService:
         })
         return result is not None
 
+    async def send_code_with_copy(self, chat_id: int, code: str) -> bool:
+        await self._post("sendMessage", {
+            "chat_id": chat_id,
+            "text": f"<b>PayBus tasdiqlash kodi</b>\n\n"
+                    f"<code>{code}</code>\n\n"
+                    f"Kodni nusxalash uchun raqam ustiga bosing va ushlab turing.",
+            "parse_mode": "HTML"
+        })
+        await self._post("sendMessage", {
+            "chat_id": chat_id,
+            "text": f"📋 <b>Nusxalash uchun kod:</b>\n\n<code>{code}</code>",
+            "parse_mode": "HTML"
+        })
+        return True
+
     async def send_welcome(self, chat_id: int):
         result = await self._post("sendMessage", {
             "chat_id": chat_id,

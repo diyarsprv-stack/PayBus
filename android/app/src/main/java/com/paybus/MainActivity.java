@@ -1,6 +1,7 @@
 package com.paybus;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private TextInputEditText etPhone, etCode;
-    private MaterialButton btnSendCode, btnVerify;
+    private MaterialButton btnSendCode, btnVerify, btnTelegramLogin;
     private LinearLayout phoneLayout, codeLayout;
     private TextView tvCodeSentTo, tvResendCode;
     private ImageButton btnBack;
@@ -51,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
         etCode = findViewById(R.id.etCode);
         btnSendCode = findViewById(R.id.btnSendCode);
         btnVerify = findViewById(R.id.btnVerify);
+        btnTelegramLogin = findViewById(R.id.btnTelegramLogin);
         tvCodeSentTo = findViewById(R.id.tvCodeSentTo);
         btnBack = findViewById(R.id.btnBack);
         tvResendCode = findViewById(R.id.tvResendCode);
 
         btnSendCode.setOnClickListener(v -> sendCode());
         btnVerify.setOnClickListener(v -> verifyCode());
+        btnTelegramLogin.setOnClickListener(v -> openTelegramBot());
         btnBack.setOnClickListener(v -> showPhoneStep());
         tvResendCode.setOnClickListener(v -> resendCode());
 
@@ -78,6 +81,44 @@ public class MainActivity extends AppCompatActivity {
         phoneLayout.setVisibility(View.GONE);
         codeLayout.setVisibility(View.VISIBLE);
         etCode.requestFocus();
+    }
+
+    private void openTelegramBot() {
+        String phone = etPhone.getText().toString().trim();
+        if (phone.isEmpty()) {
+            Toast.makeText(this, "Telefon raqamni kiriting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        session.savePhoneNumber(phone);
+        btnTelegramLogin.setEnabled(false);
+
+        PayBusApi api = ApiClient.getApi();
+        api.sendTelegramCode(new SendSMSRequest(phone)).enqueue(new Callback<PayBusApi.TelegramCodeResponse>() {
+            @Override
+            public void onResponse(Call<PayBusApi.TelegramCodeResponse> call, Response<PayBusApi.TelegramCodeResponse> response) {
+                btnTelegramLogin.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().sent) {
+                    tvCodeSentTo.setText("Kod Telegram orqali yuborildi: " + phone);
+                    showCodeStep();
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/PayBus_bot"));
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this,
+                            "Telegram botga yozing va Telefon raqamni ulashish tugmasini bosing",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PayBusApi.TelegramCodeResponse> call, Throwable t) {
+                btnTelegramLogin.setEnabled(true);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/PayBus_bot"));
+                startActivity(intent);
+                Toast.makeText(MainActivity.this,
+                        "Telegram botga yozing va Telefon raqamni ulashish tugmasini bosing",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void sendCode() {

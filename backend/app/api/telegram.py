@@ -54,6 +54,11 @@ async def telegram_webhook(request: Request):
             phone = "+" + phone
         phone_chat_map[phone] = chat_id
         await telegram_service.send_confirmation(chat_id, phone)
+        from app.services.sms import sms_service
+        code = sms_service.generate_code()
+        from app.api.auth import sms_codes
+        sms_codes[phone] = code
+        await telegram_service.send_code_with_copy(chat_id, code)
         return {"ok": True}
 
     text = (message.get("text") or "").strip()

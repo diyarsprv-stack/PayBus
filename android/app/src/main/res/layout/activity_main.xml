@@ -5,83 +5,75 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/activity_min_height">
+        android:minHeight="@dimen/activity_min_height"
+        android:orientation="vertical">
 
-        <!-- Top gradient area -->
         <View
             android:id="@+id/topGradient"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="240dp"
             android:background="@drawable/bg_login_gradient" />
 
-        <!-- Bus icon circle -->
         <LinearLayout
-            android:id="@+id/iconContainer"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/bg_card"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:elevation="4dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="PayBus"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_bus"
-                android:tint="@color/primary" />
-        </LinearLayout>
-
-        <!-- PayBus title -->
-        <TextView
-            android:id="@+id/tvAppName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iconContainer"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="12dp"
-            android:text="PayBus"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white" />
-
-        <TextView
-            android:id="@+id/tvAppSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvAppName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
-            android:text="Toshkent avtobuslari"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            android:alpha="0.8" />
-
-        <!-- White card -->
-        <LinearLayout
-            android:id="@+id/cardContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/topGradient"
-            android:layout_marginTop="-32dp"
+            android:layout_marginTop="-40dp"
             android:background="@drawable/bg_rounded_top"
             android:orientation="vertical"
-            android:paddingHorizontal="28dp"
-            android:paddingTop="32dp"
-            android:paddingBottom="40dp"
+            android:paddingHorizontal="24dp"
+            android:paddingTop="28dp"
+            android:paddingBottom="32dp"
             android:elevation="8dp">
+
+            <!-- Icon -->
+            <LinearLayout
+                android:id="@+id/iconContainer"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_card"
+                android:elevation="4dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:contentDescription="PayBus"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_bus"
+                    android:tint="@color/primary" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="PayBus"
+                android:textColor="@color/text_primary"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvAppSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Toshkent avtobuslari"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
 
             <!-- Step 1: Phone number -->
             <LinearLayout
                 android:id="@+id/phoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -89,19 +81,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Xush kelibsiz!"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="24dp"
+                    android:lineSpacingExtra="4dp"
                     android:text="Davom etish uchun telefon raqamingizni kiriting"
-                    android:textSize="14sp"
                     android:textColor="@color/text_secondary"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="32dp"
-                    android:lineSpacingExtra="4dp" />
+                    android:textSize="14sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -113,20 +105,46 @@
                         android:id="@+id/etPhone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="+998 90 123 45 67"
                         android:inputType="phone"
                         android:maxLines="1"
-                        android:paddingVertical="12dp"
-                        android:hint="+998 90 123 45 67" />
+                        android:paddingVertical="12dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSendCode"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="8dp"
                     android:text="SMS kodni yuborish"
-                    android:textSize="16sp"
-                    app:cornerRadius="16dp"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="15sp"
+                    app:cornerRadius="14dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="16dp"
+                    android:background="@color/divider" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingBottom="8dp"
+                    android:text="Yoki"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTelegramLogin"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Telegram orqali kirish"
+                    android:textSize="15sp"
+                    app:cornerRadius="14dp"
+                    app:icon="@drawable/ic_telegram"
+                    app:iconGravity="textStart" />
             </LinearLayout>
 
             <!-- Step 2: Code verification -->
@@ -140,7 +158,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -149,9 +168,9 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:tint="@color/text_primary"
                         android:contentDescription="Orqaga"
-                        android:src="@drawable/ic_arrow_back" />
+                        android:src="@drawable/ic_arrow_back"
+                        android:tint="@color/text_primary" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -165,7 +184,7 @@
                             android:layout_height="wrap_content"
                             android:text="Tasdiqlash kodi"
                             android:textColor="@color/text_primary"
-                            android:textSize="22sp"
+                            android:textSize="20sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -173,7 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="SMS kod yuborildi"
+                            android:text="Kod yuborildi"
                             android:textColor="@color/text_secondary"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -204,18 +223,18 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnVerify"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="52dp"
                     android:layout_marginTop="8dp"
                     android:text="Tasdiqlash"
-                    android:textSize="16sp"
-                    app:cornerRadius="16dp" />
+                    android:textSize="15sp"
+                    app:cornerRadius="14dp" />
 
                 <TextView
                     android:id="@+id/tvResendCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="14dp"
                     android:padding="12dp"
                     android:text="Kodni qayta yuborish"
                     android:textColor="@color/primary"
@@ -224,6 +243,6 @@
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>

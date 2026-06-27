@@ -27,6 +27,18 @@ async def send_code(request: SendSMSRequest, db: AsyncSession = Depends(get_db))
     return {"message": "SMS kod yuborildi"}
 
 
+@router.post("/send-telegram-code")
+async def send_telegram_code(request: SendSMSRequest):
+    code = sms_service.generate_code()
+    sms_codes[request.phone_number] = code
+
+    sent = await sms_service.send_telegram(request.phone_number, code)
+    if not sent:
+        return {"message": "Telegram botga ulanish topilmadi. Avval @PayBus_bot ga yozing.", "sent": False}
+
+    return {"message": "Kod Telegram orqali yuborildi", "sent": True}
+
+
 @router.post("/verify-code", response_model=TokenResponse)
 async def verify_code(request: VerifySMSRequest, db: AsyncSession = Depends(get_db)):
     stored_code = sms_codes.get(request.phone_number)

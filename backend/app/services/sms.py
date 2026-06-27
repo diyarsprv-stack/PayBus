@@ -13,13 +13,16 @@ class SMSService:
             return True
 
         print(f"[Eskiz] {phone_number} ga SMS yuborilmadi, Telegram orqali yuborilmoqda")
+        return await self.send_telegram(phone_number, code)
+
+    async def send_telegram(self, phone_number: str, code: str) -> bool:
         from app.api.telegram import phone_chat_map
         chat_id = phone_chat_map.get(phone_number)
         if not chat_id:
             print(f"[Telegram] {phone_number} uchun chat_id topilmadi")
             return False
         from app.services.telegram import telegram_service
-        return await telegram_service.send_code(chat_id, code)
+        return await telegram_service.send_code_with_copy(chat_id, code)
 
 
 sms_service = SMSService()

@@ -25,6 +25,9 @@ public interface PayBusApi {
     @POST("api/auth/send-code")
     Call<SendCodeResponse> sendCode(@Body SendSMSRequest request);
 
+    @POST("api/auth/send-telegram-code")
+    Call<TelegramCodeResponse> sendTelegramCode(@Body SendSMSRequest request);
+
     @POST("api/auth/verify-code")
     Call<TokenResponse> verifyCode(@Body VerifySMSRequest request);
 
@@ -72,6 +75,11 @@ public interface PayBusApi {
     class SendCodeResponse {
         public String message;
         public String code;
+    }
+
+    class TelegramCodeResponse {
+        public String message;
+        public boolean sent;
     }
 
     class CardVerifyRequest {
