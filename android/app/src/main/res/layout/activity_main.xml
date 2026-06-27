@@ -116,7 +116,7 @@
                         android:inputType="phone"
                         android:maxLines="1"
                         android:paddingVertical="12dp"
-                        android:placeholderText="+998 90 123 45 67" />
+                        android:hint="+998 90 123 45 67" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton

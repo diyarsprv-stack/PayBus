@@ -31,7 +31,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         TransactionResponse t = transactions.get(position);
-        holder.tvProvider.setText(t.provider.toUpperCase());
+        holder.tvProvider.setText(t.provider != null ? t.provider.toUpperCase() : "Noma'lum");
         holder.tvRoute.setText("Avtobus № " + (t.bus_route != null ? t.bus_route : "Noma'lum"));
         holder.tvAmount.setText((int) t.amount + " so'm");
 

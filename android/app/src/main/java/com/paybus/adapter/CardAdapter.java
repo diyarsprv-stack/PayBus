@@ -38,8 +38,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CardResponse card = cards.get(position);
-        holder.tvProvider.setText(card.provider.toUpperCase());
-        holder.tvCardNumber.setText("**** " + card.card_number);
+        holder.tvProvider.setText(card.provider != null ? card.provider.toUpperCase() : "Noma'lum");
+        holder.tvCardNumber.setText("**** " + (card.card_number != null ? card.card_number : "****"));
 
         if (card.is_default) {
             holder.tvDefault.setVisibility(View.VISIBLE);

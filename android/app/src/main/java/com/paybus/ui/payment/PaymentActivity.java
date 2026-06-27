@@ -56,7 +56,18 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void makePayment() {
-        double amount = Double.parseDouble(etAmount.getText().toString().trim());
+        String amountStr = etAmount.getText().toString().trim();
+        if (amountStr.isEmpty()) {
+            Toast.makeText(this, "Summani kiriting", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        double amount;
+        try {
+            amount = Double.parseDouble(amountStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Notog'ri summa", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String provider = etProvider.getText().toString().trim();
         String cardId = etCardId.getText().toString().trim();
 

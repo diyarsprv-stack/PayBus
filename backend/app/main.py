@@ -38,3 +38,16 @@ async def shutdown():
 @app.get("/")
 async def root():
     return {"message": "PayBus API ishlayapti", "version": "1.0.0", "status": "ready"}
+
+
+@app.get("/health/eskiz")
+async def check_eskiz():
+    from app.services.eskiz import eskiz_service
+    token = await eskiz_service._login()
+    balance = await eskiz_service.get_balance() if token else None
+    return {
+        "email_configured": bool(eskiz_service.email),
+        "password_configured": bool(eskiz_service.password),
+        "token_obtained": token is not None,
+        "balance": balance
+    }

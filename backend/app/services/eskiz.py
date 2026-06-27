@@ -51,6 +51,8 @@ class EskizService:
         if not self._token:
             return False
 
+        phone_number = phone_number.replace("+", "").replace(" ", "")
+
         headers = {"Authorization": f"Bearer {self._token}"}
         payload = {
             "mobile_phone": phone_number,
@@ -76,6 +78,7 @@ class EskizService:
                         data=payload,
                     )
                     return resp.status_code in (200, 201)
+                print(f"[Eskiz SMS xatolik] {resp.status_code}: {resp.text[:200]}")
         except Exception as e:
             print(f"[Eskiz SMS xatolik] {e}")
         return False

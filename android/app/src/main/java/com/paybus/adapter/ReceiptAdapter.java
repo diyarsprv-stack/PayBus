@@ -37,7 +37,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ViewHold
         counter++;
 
         holder.tvRoute.setText("№ " + (t.bus_route != null ? t.bus_route : "Noma'lum"));
-        holder.tvProvider.setText(t.provider.toUpperCase());
+        holder.tvProvider.setText(t.provider != null ? t.provider.toUpperCase() : "Noma'lum");
         holder.tvAmount.setText(String.format("%,d", (int) t.amount) + " so'm");
         holder.tvReceiptId.setText("#TRX" + String.format("%03d", counter));
 

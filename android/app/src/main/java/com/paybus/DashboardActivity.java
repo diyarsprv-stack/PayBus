@@ -22,11 +22,9 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         session = new SessionManager(this);
-
-        if (isDarkTheme()) {
+        if (session.getThemeMode() != null && session.getThemeMode().equals("dark")) {
             setTheme(R.style.Theme_PayBus_Dark);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
@@ -60,10 +58,6 @@ public class DashboardActivity extends AppCompatActivity {
     private void loadFragment(Fragment fragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
-        ft.commit();
-    }
-
-    private boolean isDarkTheme() {
-        return session.getThemeMode() != null && session.getThemeMode().equals("dark");
+        ft.commitAllowingStateLoss();
     }
 }

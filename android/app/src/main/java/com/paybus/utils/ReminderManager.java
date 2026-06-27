@@ -84,7 +84,7 @@ public class ReminderManager {
     }
 
     public List<Reminder> getReminders() {
-        String json = context.getSharedPreferences("PayBusSession", Context.MODE_PRIVATE)
+        String json = context.getSharedPreferences("PayBusRemindersPref", Context.MODE_PRIVATE)
                 .getString(PREFS_KEY, "[]");
         List<Reminder> list = new ArrayList<>();
         try {
@@ -124,7 +124,7 @@ public class ReminderManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        context.getSharedPreferences("PayBusSession", Context.MODE_PRIVATE)
+        context.getSharedPreferences("PayBusRemindersPref", Context.MODE_PRIVATE)
                 .edit().putString(PREFS_KEY, arr.toString()).apply();
     }
 }

@@ -53,7 +53,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         tvWelcome = findViewById(R.id.tvWelcome);
-        tvWelcome.setText("Xush kelibsiz, " + session.getPhoneNumber());
+        String phone = session.getPhoneNumber();
+        tvWelcome.setText("Xush kelibsiz, " + (phone != null ? phone : "foydalanuvchi"));
 
         rvRoutes = findViewById(R.id.rvRoutes);
         rvRoutes.setLayoutManager(new LinearLayoutManager(this));

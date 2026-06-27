@@ -20,7 +20,9 @@ async def send_code(request: SendSMSRequest, db: AsyncSession = Depends(get_db))
     code = sms_service.generate_code()
     sms_codes[request.phone_number] = code
 
-    await sms_service.send_sms(request.phone_number, code)
+    sent = await sms_service.send_sms(request.phone_number, code)
+    if not sent:
+        print(f"[Auth] SMS yuborilmadi: {request.phone_number}")
 
     return {"message": "SMS kod yuborildi"}
 
