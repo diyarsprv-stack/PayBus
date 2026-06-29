@@ -54,7 +54,8 @@ public class MapFragment extends Fragment {
 
     private FloatingActionButton fabLocation;
     private ImageButton btnClosePanel, btnBackToStop, btnBackToRoute;
-    private Button btnPayRoute, btnConfirmPay, btnDecrement, btnIncrement;
+    private Button btnPayRoute, btnConfirmPay;
+    private ImageButton btnDecrement, btnIncrement;
     private Spinner spinnerCards;
     private EditText etAmount;
     private TextView tvStopName, tvStopAddress;
