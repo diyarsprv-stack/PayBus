@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Til sozlamalari"
+                android:text="@string/settings_language"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Dastur tilini o'zgartirish"
+                android:text="@string/settings_language_desc"
                 android:textSize="13sp"
                 android:textColor="@color/text_secondary" />
 
@@ -47,7 +47,7 @@
                     android:id="@+id/radioUz"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="O'zbekcha"
+                    android:text="@string/language_uz"
                     android:textColor="@color/text_primary"
                     android:buttonTint="@color/primary" />
 
@@ -55,7 +55,7 @@
                     android:id="@+id/radioRu"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="Русский"
+                    android:text="@string/language_ru"
                     android:textColor="@color/text_primary"
                     android:buttonTint="@color/primary" />
 
@@ -63,7 +63,7 @@
                     android:id="@+id/radioEn"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:text="English"
+                    android:text="@string/language_en"
                     android:textColor="@color/text_primary"
                     android:buttonTint="@color/primary" />
 
@@ -97,7 +97,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Kun/Tun rejimi"
+                        android:text="@string/settings_theme"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary" />
@@ -106,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Tun rejimiga o'tish"
+                        android:text="@string/theme_desc"
                         android:textSize="13sp"
                         android:textColor="@color/text_secondary" />
 
@@ -137,7 +137,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dastur haqida"
+                android:text="@string/about"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
@@ -146,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="PayBus v1.0"
+                android:text="@string/app_version"
                 android:textSize="14sp"
                 android:textColor="@color/text_secondary" />
 
@@ -154,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Toshkent shahar avtobuslari uchun to'lov tizimi"
+                android:text="@string/app_desc"
                 android:textSize="13sp"
                 android:textColor="@color/text_secondary" />
 
@@ -165,7 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:gravity="center"
-            android:text="© 2026 PayBus"
+            android:text="@string/copyright"
             android:textColor="@color/text_secondary"
             android:textSize="12sp" />
 

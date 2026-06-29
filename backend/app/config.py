@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     ESKIZ_PASSWORD: str = ""
     ESKIZ_FROM: str = "4546"
 
+    # 3TM API (Tashkent real-time bus tracking)
+    THREE_TM_API_URL: str = "https://3tmapi.online"
+    THREE_TM_CACHE_TTL: int = 60  # seconds
+
     # Payment provider credentials
     UZCARD_MERCHANT_ID: str = ""
     UZCARD_SECRET_KEY: str = ""

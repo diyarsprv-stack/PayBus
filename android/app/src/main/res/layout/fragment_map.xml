@@ -48,7 +48,7 @@
                     android:id="@+id/tvStopName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bekat nomi"
+                    android:text="@string/stop_name"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Manzil"
+                    android:text="@string/address"
                     android:textSize="13sp"
                     android:textColor="@color/text_secondary" />
 
@@ -86,7 +86,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Yaqin kelayotgan avtobuslar"
+            android:text="@string/nearby_buses"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -139,7 +139,7 @@
                     android:id="@+id/tvRouteTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="№ 18 Chilonzor - Yunusobod"
+                    android:text="@string/route"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary" />
@@ -148,7 +148,7 @@
                     android:id="@+id/tvRoutePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1700 so'm"
+                    android:text="@string/amount_soum"
                     android:textSize="13sp"
                     android:textColor="@color/text_secondary" />
 
@@ -165,7 +165,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Marshrut bekatlari"
+            android:text="@string/route_stops"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -183,7 +183,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/primary"
-            android:text="To'lash"
+            android:text="@string/pay"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
             android:textSize="16sp"
@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="To'lov"
+                android:text="@string/payment"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary" />
@@ -241,7 +241,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Karta tanlang"
+            android:text="@string/select_card"
             android:textSize="14sp"
             android:textColor="@color/text_secondary"
             android:layout_marginBottom="8dp" />
@@ -259,7 +259,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="To'lov summasi"
+            android:text="@string/amount"
             android:textSize="14sp"
             android:textColor="@color/text_secondary" />
 
@@ -268,7 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="4dp"
-            android:text="1700 so'm"
+            android:text="@string/amount_soum"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -291,7 +291,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Yo'lovchilar soni"
+                android:text="@string/passenger_count"
                 android:textSize="14sp"
                 android:textColor="@color/text_primary" />
 
@@ -335,7 +335,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Jami: 1 700 so'm"
+            android:text="@string/total_label"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/primary" />
@@ -346,7 +346,7 @@
             android:layout_height="52dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="@color/primary"
-            android:text="To'lash"
+            android:text="@string/pay"
             android:textColor="@android:color/white"
             android:textAllCaps="false"
             android:textSize="18sp"

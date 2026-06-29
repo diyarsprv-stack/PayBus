@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="Karta qo'shish"
+        android:title="@string/add_card"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         android:navigationIcon="?attr/homeAsUpIndicator" />
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:hint="Karta raqami">
+        android:hint="@string/card_number_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCardNumber"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Karta egasi">
+        android:hint="@string/card_holder_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCardHolder"
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:hint="Muddati (MM/YY)">
+            android:hint="@string/expiry_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etExpireDate"
                 android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:hint="Provider">
+            android:hint="@string/provider_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etProvider"
                 android:layout_width="match_parent"
@@ -79,6 +79,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Kartani saqlash" />
+            android:text="@string/save_card" />
 
 </LinearLayout>

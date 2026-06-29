@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="To'lov"
+        android:title="@string/payment"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         android:navigationIcon="?attr/homeAsUpIndicator" />
 
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:hint="Summa (so'm)">
+        android:hint="@string/amount_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etAmount"
             android:layout_width="match_parent"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Provider (uzcard/humo/click/payme)">
+        android:hint="@string/provider_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etProvider"
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Karta ID (agar mavjud)">
+        android:hint="@string/card_id_hint">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCardId"
             android:layout_width="match_parent"
@@ -64,6 +64,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="To'lash" />
+        android:text="@string/pay" />
 
 </LinearLayout>

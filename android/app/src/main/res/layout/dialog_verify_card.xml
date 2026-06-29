@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kartani tasdiqlash"
+        android:text="@string/verify_card"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Telefon raqamingizga SMS kod yuborildi"
+        android:text="@string/sms_sent_to"
         android:textSize="13sp"
         android:textColor="@color/text_secondary"
         android:layout_marginBottom="16dp" />
@@ -27,7 +27,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tasdiqlash kodi"
+        android:hint="@string/verify_title"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -50,7 +50,7 @@
             android:id="@+id/btnCancelVerify"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Bekor qilish"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             style="@style/Widget.Material3.Button.TextButton" />
 
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:text="Tasdiqlash"
+            android:text="@string/verify_button"
             android:textAllCaps="false"
             android:backgroundTint="@color/primary"
             android:textColor="@android:color/white"

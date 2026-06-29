@@ -122,6 +122,8 @@ public class MapFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 requestLocationPermission();
+                // Xarita yuklanganda Toshkent markazi bekatlarini yuklash
+                fetchNearbyStops(41.2995, 69.2401);
             }
         });
         webView.loadUrl("file:///android_asset/map.html");
@@ -419,6 +421,14 @@ public class MapFragment extends Fragment {
             if (locationPermissionGranted) {
                 moveToCurrentLocation();
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (locationPermissionGranted) {
+            moveToCurrentLocation();
         }
     }
 }

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import auth, payment, bus, telegram
+from app.api.three_tm_client import three_tm
 from app.database import engine, Base
 
 app = FastAPI(
@@ -33,6 +34,7 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await engine.dispose()
+    await three_tm.close()
 
 
 @app.get("/")

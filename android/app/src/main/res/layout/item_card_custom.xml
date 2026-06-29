@@ -57,7 +57,7 @@
             android:id="@+id/tvCardDefault"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Asosiy"
+            android:text="@string/default_card"
             android:textSize="11sp"
             android:textColor="@color/primary"
             android:visibility="gone"

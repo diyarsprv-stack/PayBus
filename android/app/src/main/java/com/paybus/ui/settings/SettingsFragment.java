@@ -33,37 +33,32 @@ public class SettingsFragment extends Fragment {
         themeSwitch.setChecked("dark".equals(currentTheme));
 
         String currentLang = session.getLanguage();
-        if (currentLang != null) {
-            switch (currentLang) {
-                case "uz":
-                    view.findViewById(R.id.radioUz).performClick();
-                    break;
-                case "ru":
-                    view.findViewById(R.id.radioRu).performClick();
-                    break;
-                case "en":
-                    view.findViewById(R.id.radioEn).performClick();
-                    break;
-                default:
-                    view.findViewById(R.id.radioUz).performClick();
-                    break;
-            }
-        } else {
-            view.findViewById(R.id.radioUz).performClick();
-        }
-
         RadioButton radioUz = view.findViewById(R.id.radioUz);
         RadioButton radioRu = view.findViewById(R.id.radioRu);
         RadioButton radioEn = view.findViewById(R.id.radioEn);
 
-        radioUz.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) session.saveLanguage("uz");
-        });
-        radioRu.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) session.saveLanguage("ru");
-        });
-        radioEn.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) session.saveLanguage("en");
+        switch (currentLang) {
+            case "ru":
+                radioRu.setChecked(true);
+                break;
+            case "en":
+                radioEn.setChecked(true);
+                break;
+            default:
+                radioUz.setChecked(true);
+        }
+
+        languageGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            String lang;
+            if (checkedId == R.id.radioRu) {
+                lang = "ru";
+            } else if (checkedId == R.id.radioEn) {
+                lang = "en";
+            } else {
+                lang = "uz";
+            }
+            session.saveLanguage(lang);
+            requireActivity().recreate();
         });
 
         themeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {

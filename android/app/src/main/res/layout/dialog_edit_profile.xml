@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ismni tahrirlash"
+        android:text="@string/edit_name"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
@@ -18,7 +18,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ism Familiya"
+        android:hint="@string/full_name"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -40,7 +40,7 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:text="Bekor qilish"
+            android:text="@string/cancel"
             android:textAllCaps="false"
             style="@style/Widget.Material3.Button.TextButton" />
 
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:text="Saqlash"
+            android:text="@string/save"
             android:textAllCaps="false"
             android:backgroundTint="@color/primary"
             android:textColor="@android:color/white"

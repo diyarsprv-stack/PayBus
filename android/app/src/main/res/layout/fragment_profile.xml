@@ -45,7 +45,7 @@
                     android:id="@+id/tvProfileName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ism Familiya"
+                    android:text="@string/full_name"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="+998901234567"
+                    android:text="@string/phone_hint"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary" />
 
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mening kartalarim"
+                android:text="@string/my_cards_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Hozircha kartalar yo'q"
+                android:text="@string/no_cards"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:visibility="gone" />
@@ -113,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:text="Yangi karta qo'shish"
+                android:text="@string/add_card"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:textAllCaps="false"
@@ -134,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tranzaksiyalar tarixi"
+                android:text="@string/profile_transactions"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="Hozircha tranzaksiyalar yo'q"
+                android:text="@string/no_transactions"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:visibility="gone" />
@@ -165,7 +165,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="32dp"
-            android:text="Chiqish"
+            android:text="@string/logout"
             android:textColor="@color/error"
             android:textSize="14sp"
             android:textAllCaps="false"

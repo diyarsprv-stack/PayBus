@@ -2,7 +2,7 @@ package com.paybus;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -14,7 +14,7 @@ import com.paybus.ui.reminder.ReminderFragment;
 import com.paybus.ui.settings.SettingsFragment;
 import com.paybus.utils.SessionManager;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends BaseActivity {
 
     private BottomNavigationView bottomNav;
     private SessionManager session;
@@ -53,6 +53,12 @@ public class DashboardActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_profile);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void loadFragment(Fragment fragment) {

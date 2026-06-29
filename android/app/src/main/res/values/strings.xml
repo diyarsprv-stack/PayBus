@@ -1,27 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PayBus</string>
+
+    <!-- Navigation -->
     <string name="nav_profile">Profil</string>
-    <string name="nav_map">Harita</string>
+    <string name="nav_map">Xarita</string>
     <string name="nav_settings">Sozlamalar</string>
-    <string name="my_cards">Mening kartalarim</string>
+    <string name="nav_reminder">Eslatmalar</string>
+    <string name="nav_history">Tarix</string>
+
+    <!-- Auth -->
+    <string name="welcome_title">PayBus</string>
+    <string name="welcome_subtitle">Toshkent avtobuslari</string>
+    <string name="welcome_message">Xush kelibsiz!</string>
+    <string name="phone_hint">+998901234567</string>
+    <string name="enter_phone">Davom etish uchun telefon raqamingizni kiriting</string>
+    <string name="send_code">SMS kodni yuborish</string>
+    <string name="verify_title">Tasdiqlash kodi</string>
+    <string name="code_sent">Kod yuborildi</string>
+    <string name="verify_button">Tasdiqlash</string>
+    <string name="resend_code">Kodni qayta yuborish</string>
+    <string name="telegram_code">Kodni Telegramda olish</string>
+
+    <!-- Home -->
+    <string name="my_cards">Kartalarim</string>
+    <string name="transactions">Tranzaksiyalar</string>
+
+    <!-- Cards -->
     <string name="add_card">Yangi karta qo\'shish</string>
-    <string name="transactions">Tranzaksiyalar tarixi</string>
+    <string name="save_card">Kartani saqlash</string>
+    <string name="my_cards_title">Mening kartalarim</string>
+    <string name="no_cards">Hozircha kartalar yo\'q</string>
+    <string name="verify_card">Kartani tasdiqlash</string>
+    <string name="sms_sent_to">Telefon raqamingizga SMS kod yuborildi</string>
+    <string name="default_card">Asosiy</string>
+    <string name="delete">O\'chirish</string>
+
+    <!-- Map -->
+    <string name="stop_name">Bekat nomi</string>
+    <string name="address">Manzil</string>
+    <string name="nearby_buses">Yaqin kelayotgan avtobuslar</string>
+    <string name="route_stops">Marshrut bekatlari</string>
+    <string name="pay">To\'lash</string>
+    <string name="payment">To\'lov</string>
+    <string name="select_card">Karta tanlang</string>
+    <string name="amount">To\'lov summasi</string>
+    <string name="passenger_count">Yo\'lovchilar soni</string>
+    <string name="total_label">Jami:</string>
+    <string name="my_location">Mening joylashuvim</string>
+
+    <!-- Transactions -->
+    <string name="transaction_history">To\'lov tarixi</string>
+    <string name="all_receipts">Barcha cheklar</string>
+    <string name="no_transactions">Hali hech qanday to\'lov amalga oshirilmagan</string>
+
+    <!-- Reminders -->
+    <string name="reminders">Eslatmalar</string>
+    <string name="no_reminders">Hali eslatma qo\'yilmagan.\nXaritada avtobus bekatiga bosib eslatma qo\'ying</string>
+    <string name="auto_pay">Avtomatik to\'lov</string>
+
+    <!-- Profile -->
+    <string name="full_name">Ism Familiya</string>
     <string name="logout">Chiqish</string>
     <string name="edit_name">Ismni tahrirlash</string>
-    <string name="save">Saqlash</string>
-    <string name="cancel">Bekor qilish</string>
+    <string name="profile_cards">Mening kartalarim</string>
+    <string name="profile_transactions">Tranzaksiyalar tarixi</string>
+
+    <!-- Settings -->
     <string name="settings_language">Til sozlamalari</string>
-    <string name="settings_theme">Kun/Tun rejimi</string>
+    <string name="settings_language_desc">Dastur tilini o\'zgartirish</string>
     <string name="language_uz">O\'zbekcha</string>
     <string name="language_ru">Русский</string>
     <string name="language_en">English</string>
+    <string name="settings_theme">Kun/Tun rejimi</string>
+    <string name="theme_desc">Tun rejimiga o\'tish</string>
     <string name="about">Dastur haqida</string>
     <string name="app_version">PayBus v1.0</string>
     <string name="app_desc">Toshkent shahar avtobuslari uchun to\'lov tizimi</string>
-    <string name="nearby_buses">Yaqin kelayotgan avtobuslar</string>
-    <string name="my_location">Mening joylashuvim</string>
-    <string name="default_card">Asosiy</string>
-    <string name="delete">O\'chirish</string>
-    <string name="phone_hint">+998901234567</string>
+    <string name="copyright">© 2026 PayBus</string>
+
+    <!-- General -->
+    <string name="save">Saqlash</string>
+    <string name="cancel">Bekor qilish</string>
+    <string name="confirm">Tasdiqlash</string>
+    <string name="success">Muvaffaqiyatli</string>
+    <string name="network_error">Tarmoq xatoligi</string>
+    <string name="loading">Yuklanmoqda...</string>
+    <string name="card">Karta</string>
+    <string name="amount_soum">so\'m</string>
+    <string name="route">Marshrut</string>
+    <string name="stop">Bekat</string>
+    <string name="search">Qidirish</string>
+
+    <!-- Form hints -->
+    <string name="phone_label">Telefon raqam</string>
+    <string name="code_hint">6 xonali kod</string>
+    <string name="card_number_hint">Karta raqami</string>
+    <string name="card_holder_hint">Karta egasi</string>
+    <string name="expiry_hint">Muddati (MM/YY)</string>
+    <string name="provider_hint">Provider</string>
+    <string name="amount_hint">Summa (so\'m)</string>
+    <string name="card_id_hint">Karta ID (agar mavjud)</string>
 </resources>
