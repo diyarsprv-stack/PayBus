@@ -1,8 +1,0 @@
-2026-06-28 00:43:09,424 INFO sqlalchemy.engine.Engine BEGIN (implicit)
-2026-06-28 00:43:09,427 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("users")
-2026-06-28 00:43:09,429 INFO sqlalchemy.engine.Engine [raw sql] ()
-2026-06-28 00:43:09,437 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("payment_cards")
-2026-06-28 00:43:09,439 INFO sqlalchemy.engine.Engine [raw sql] ()
-2026-06-28 00:43:09,444 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("transactions")
-2026-06-28 00:43:09,446 INFO sqlalchemy.engine.Engine [raw sql] ()
-2026-06-28 00:43:09,452 INFO sqlalchemy.engine.Engine COMMIT
