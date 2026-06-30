@@ -94,6 +94,8 @@ def _calc_arrival_times(start_time: str, duration_min: int, stations: list) -> l
             "stop_id": str(rs["id"]),
             "name": rs.get("uzName") or rs.get("name", ""),
             "arrival_time": f"{hh:02d}:{mm:02d}",
+            "lat": rs.get("lat"),
+            "lng": rs.get("lng"),
         })
     return result
 
@@ -147,6 +149,15 @@ async def get_nearby_buses(
                     "busType": bus.get("busTypeName", ""),
                 })
     return {"message": "Atrofdagi avtobuslar", "buses": buses_list}
+
+
+@router.get("/stop-location/{stop_id}")
+async def get_stop_location(stop_id: str, user: User = Depends(get_current_user)):
+    stations = await three_tm.get_stations()
+    station = next((s for s in stations if str(s["id"]) == stop_id), None)
+    if not station:
+        return {"error": "Bekat topilmadi"}
+    return {"id": stop_id, "name": station.get("uzName") or station.get("name", ""), "lat": station["lat"], "lng": station["lng"]}
 
 
 @router.post("/pay-route/{route_id}")

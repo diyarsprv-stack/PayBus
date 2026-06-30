@@ -64,6 +64,11 @@ public interface PayBusApi {
                                               @Query("lat") double lat,
                                               @Query("lng") double lng);
 
+    @GET("api/bus/nearby")
+    Call<NearbyBusesResponse> getNearbyBuses(@Header("Authorization") String token,
+                                              @Query("lat") double lat,
+                                              @Query("lng") double lng);
+
     @GET("api/bus/arrivals/{stop_id}")
     Call<BusArrivalsResponse> getStopArrivals(@Header("Authorization") String token,
                                                @Path("stop_id") String stopId);
@@ -71,6 +76,10 @@ public interface PayBusApi {
     @GET("api/bus/route-schedule/{route_id}")
     Call<RouteScheduleResponse> getRouteSchedule(@Header("Authorization") String token,
                                                   @Path("route_id") String routeId);
+
+    @GET("api/bus/stop-location/{stop_id}")
+    Call<StopLocationResponse> getStopLocation(@Header("Authorization") String token,
+                                                @Path("stop_id") String stopId);
 
     class SendCodeResponse {
         public String message;
@@ -128,5 +137,30 @@ public interface PayBusApi {
         public String stop_id;
         public String name;
         public String arrival_time;
+        public double lat;
+        public double lng;
+    }
+
+    class StopLocationResponse {
+        public String id;
+        public String name;
+        public double lat;
+        public double lng;
+    }
+
+    class NearbyBusesResponse {
+        public String message;
+        public List<BusInfo> buses;
+    }
+
+    class BusInfo {
+        public String id;
+        public String route;
+        public double lat;
+        public double lng;
+        public double speed;
+        public double direction;
+        public String plate;
+        public String busType;
     }
 }

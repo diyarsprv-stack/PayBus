@@ -17,3 +17,5 @@ local.properties
 *.vsix
 stderr*.txt
 stdout*.txt
+*_stderr.txt
+*_stdout.txt

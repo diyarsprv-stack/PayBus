@@ -13,6 +13,8 @@ import com.paybus.utils.ReminderManager;
 
 import java.util.List;
 
+import com.paybus.utils.ReminderManager;
+
 public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopScheduleAdapter.ViewHolder> {
 
     private List<StopSchedule> stops;
@@ -24,11 +26,21 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
         public String stopId;
         public String name;
         public String arrivalTime;
+        public double lat;
+        public double lng;
 
         public StopSchedule(String stopId, String name, String arrivalTime) {
             this.stopId = stopId;
             this.name = name;
             this.arrivalTime = arrivalTime;
+        }
+
+        public StopSchedule(String stopId, String name, String arrivalTime, double lat, double lng) {
+            this.stopId = stopId;
+            this.name = name;
+            this.arrivalTime = arrivalTime;
+            this.lat = lat;
+            this.lng = lng;
         }
     }
 
@@ -62,13 +74,16 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
         }
 
         boolean hasReminder = reminderManager.hasReminder(routeId, stop.stopId);
-        if (hasReminder) {
-            holder.btnRemind.setImageResource(R.drawable.ic_bell);
-            holder.btnRemind.setAlpha(1f);
-        } else {
-            holder.btnRemind.setImageResource(R.drawable.ic_bell);
-            holder.btnRemind.setAlpha(0.4f);
+        holder.btnRemind.setAlpha(hasReminder ? 1f : 0.4f);
+
+        boolean hasAutoPay = false;
+        for (ReminderManager.Reminder r : reminderManager.getReminders()) {
+            if (r.routeId.equals(routeId) && r.stopId.equals(stop.stopId) && r.autoPay) {
+                hasAutoPay = true;
+                break;
+            }
         }
+        holder.btnAutoPay.setAlpha(hasAutoPay ? 1f : 0.4f);
 
         holder.btnRemind.setOnClickListener(v -> {
             reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime);
@@ -76,13 +91,35 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
         });
 
         holder.btnAutoPay.setOnClickListener(v -> {
-            if (reminderManager.hasReminder(routeId, stop.stopId)) {
-                holder.btnAutoPay.setAlpha(1f);
-            } else {
-                reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime);
-                holder.btnRemind.setAlpha(1f);
-                holder.btnAutoPay.setAlpha(1f);
+            List<ReminderManager.Reminder> all = reminderManager.getReminders();
+            ReminderManager.Reminder existing = null;
+            for (ReminderManager.Reminder r : all) {
+                if (r.routeId.equals(routeId) && r.stopId.equals(stop.stopId)) {
+                    existing = r;
+                    break;
+                }
             }
+            if (existing == null) {
+                reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime,
+                        stop.lat, stop.lng);
+                all = reminderManager.getReminders();
+                for (ReminderManager.Reminder r : all) {
+                    if (r.routeId.equals(routeId) && r.stopId.equals(stop.stopId)) {
+                        existing = r;
+                        break;
+                    }
+                }
+            }
+            if (existing != null) {
+                boolean newState = !existing.autoPay;
+                reminderManager.toggleAutoPay(existing.id, newState);
+                if (newState && existing.stopLat == 0 && existing.stopLng == 0) {
+                    reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime,
+                            stop.lat, stop.lng);
+                }
+                holder.btnAutoPay.setAlpha(newState ? 1f : 0.4f);
+            }
+            holder.btnRemind.setAlpha(1f);
         });
 
         holder.itemView.setOnClickListener(v -> {

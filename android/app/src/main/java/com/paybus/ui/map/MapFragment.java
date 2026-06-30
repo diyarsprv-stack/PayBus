@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -72,6 +73,11 @@ public class MapFragment extends Fragment {
     private String selectedStopId;
     private String selectedRouteName;
 
+    private double currentLat = 41.2995;
+    private double currentLng = 69.2401;
+    private android.os.Handler busRefreshHandler = new android.os.Handler();
+    private static final long BUS_REFRESH_INTERVAL = 15000; // 15 soniya
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
@@ -118,6 +124,9 @@ public class MapFragment extends Fragment {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        webView.getSettings().setMixedContentMode(0); // always allow mixed content
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.addJavascriptInterface(new PayBusBridge(), "PayBusBridge");
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -125,6 +134,8 @@ public class MapFragment extends Fragment {
                 requestLocationPermission();
                 // Xarita yuklanganda Toshkent markazi bekatlarini yuklash
                 fetchNearbyStops(41.2995, 69.2401);
+                fetchNearbyBuses(41.2995, 69.2401);
+                startBusRefresh();
             }
         });
         webView.loadUrl("file:///android_asset/map.html");
@@ -161,6 +172,35 @@ public class MapFragment extends Fragment {
                 fetchArrivals(stopId, name, address);
             });
         }
+    }
+
+    private void startBusRefresh() {
+        busRefreshHandler.removeCallbacksAndMessages(null);
+        busRefreshHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fetchNearbyBuses(currentLat, currentLng);
+                busRefreshHandler.postDelayed(this, BUS_REFRESH_INTERVAL);
+            }
+        }, BUS_REFRESH_INTERVAL);
+    }
+
+    private void fetchNearbyBuses(double lat, double lng) {
+        String token = "Bearer " + session.getToken();
+        PayBusApi api = ApiClient.getApi();
+        api.getNearbyBuses(token, lat, lng).enqueue(new Callback<PayBusApi.NearbyBusesResponse>() {
+            @Override
+            public void onResponse(Call<PayBusApi.NearbyBusesResponse> call,
+                                   Response<PayBusApi.NearbyBusesResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().buses != null) {
+                    String json = new com.google.gson.Gson().toJson(response.body().buses);
+                    webView.evaluateJavascript("updateBusMarkers(" + json + ");", null);
+                }
+            }
+            @Override
+            public void onFailure(Call<PayBusApi.NearbyBusesResponse> call, Throwable t) {
+            }
+        });
     }
 
     private void fetchNearbyStops(double lat, double lng) {
@@ -268,7 +308,7 @@ public class MapFragment extends Fragment {
                     List<BusStopScheduleAdapter.StopSchedule> stops = new ArrayList<>();
                     for (PayBusApi.ScheduleStop s : schedule.stops) {
                         stops.add(new BusStopScheduleAdapter.StopSchedule(
-                                s.stop_id, s.name, s.arrival_time));
+                                s.stop_id, s.name, s.arrival_time, s.lat, s.lng));
                     }
                     rvRouteStops.setAdapter(new BusStopScheduleAdapter(stops, reminderManager, routeId, schedule.name));
 
@@ -392,10 +432,11 @@ public class MapFragment extends Fragment {
 
         fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
-                double lat = location.getLatitude();
-                double lng = location.getLongitude();
-                webView.evaluateJavascript("setUserLocation(" + lat + ", " + lng + ");", null);
-                fetchNearbyStops(lat, lng);
+                currentLat = location.getLatitude();
+                currentLng = location.getLongitude();
+                webView.evaluateJavascript("setUserLocation(" + currentLat + ", " + currentLng + ");", null);
+                fetchNearbyStops(currentLat, currentLng);
+                fetchNearbyBuses(currentLat, currentLng);
             } else {
                 webView.evaluateJavascript("map.setView([41.2995, 69.2401], 13);", null);
                 fetchNearbyStops(41.2995, 69.2401);
@@ -431,5 +472,12 @@ public class MapFragment extends Fragment {
         if (locationPermissionGranted) {
             moveToCurrentLocation();
         }
+        startBusRefresh();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        busRefreshHandler.removeCallbacksAndMessages(null);
     }
 }

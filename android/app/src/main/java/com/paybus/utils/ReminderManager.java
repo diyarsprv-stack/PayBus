@@ -22,9 +22,12 @@ public class ReminderManager {
         public String stopName;
         public String arrivalTime;
         public boolean autoPay;
+        public double stopLat;
+        public double stopLng;
 
         public Reminder(String id, String routeId, String routeName,
-                        String stopId, String stopName, String arrivalTime, boolean autoPay) {
+                        String stopId, String stopName, String arrivalTime, boolean autoPay,
+                        double stopLat, double stopLng) {
             this.id = id;
             this.routeId = routeId;
             this.routeName = routeName;
@@ -32,6 +35,8 @@ public class ReminderManager {
             this.stopName = stopName;
             this.arrivalTime = arrivalTime;
             this.autoPay = autoPay;
+            this.stopLat = stopLat;
+            this.stopLng = stopLng;
         }
     }
 
@@ -41,6 +46,12 @@ public class ReminderManager {
 
     public void addReminder(String routeId, String routeName,
                             String stopId, String stopName, String arrivalTime) {
+        addReminder(routeId, routeName, stopId, stopName, arrivalTime, 0, 0);
+    }
+
+    public void addReminder(String routeId, String routeName,
+                            String stopId, String stopName, String arrivalTime,
+                            double stopLat, double stopLng) {
         List<Reminder> reminders = getReminders();
         for (Reminder r : reminders) {
             if (r.routeId.equals(routeId) && r.stopId.equals(stopId)) {
@@ -48,7 +59,7 @@ public class ReminderManager {
             }
         }
         String id = UUID.randomUUID().toString().substring(0, 8);
-        reminders.add(new Reminder(id, routeId, routeName, stopId, stopName, arrivalTime, false));
+        reminders.add(new Reminder(id, routeId, routeName, stopId, stopName, arrivalTime, false, stopLat, stopLng));
         saveReminders(reminders);
     }
 
@@ -98,7 +109,9 @@ public class ReminderManager {
                         obj.getString("stopId"),
                         obj.getString("stopName"),
                         obj.getString("arrivalTime"),
-                        obj.optBoolean("autoPay", false)
+                        obj.optBoolean("autoPay", false),
+                        obj.optDouble("stopLat", 0),
+                        obj.optDouble("stopLng", 0)
                 ));
             }
         } catch (Exception e) {
@@ -119,6 +132,8 @@ public class ReminderManager {
                 obj.put("stopName", r.stopName);
                 obj.put("arrivalTime", r.arrivalTime);
                 obj.put("autoPay", r.autoPay);
+                obj.put("stopLat", r.stopLat);
+                obj.put("stopLng", r.stopLng);
                 arr.put(obj);
             }
         } catch (Exception e) {

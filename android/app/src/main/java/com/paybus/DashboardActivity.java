@@ -1,5 +1,6 @@
 package com.paybus;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.paybus.service.AutoPayService;
 import com.paybus.ui.history.HistoryFragment;
 import com.paybus.ui.map.MapFragment;
 import com.paybus.ui.profile.ProfileFragment;
@@ -27,6 +29,7 @@ public class DashboardActivity extends BaseActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        startService(new Intent(this, AutoPayService.class));
 
         bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -59,6 +62,12 @@ public class DashboardActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, AutoPayService.class));
     }
 
     private void loadFragment(Fragment fragment) {
