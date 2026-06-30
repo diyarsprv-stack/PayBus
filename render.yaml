@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: paybus
+    runtime: python
+    repo: https://github.com/diyarsprv-stack/PayBus
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
