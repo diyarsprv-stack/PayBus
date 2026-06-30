@@ -132,7 +132,6 @@ public class MapFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 requestLocationPermission();
-                // Xarita yuklanganda Toshkent markazi bekatlarini yuklash
                 fetchNearbyStops(41.2995, 69.2401);
                 fetchNearbyBuses(41.2995, 69.2401);
                 startBusRefresh();
@@ -194,7 +193,9 @@ public class MapFragment extends Fragment {
                                    Response<PayBusApi.NearbyBusesResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().buses != null) {
                     String json = new com.google.gson.Gson().toJson(response.body().buses);
-                    webView.evaluateJavascript("updateBusMarkers(" + json + ");", null);
+                    if (webView != null) {
+                        webView.evaluateJavascript("updateBusMarkers(" + json + ");", null);
+                    }
                 }
             }
             @Override

@@ -30,8 +30,10 @@ async def get_nearby_stops(
     stations = await three_tm.get_stations()
     nearby = []
     for s in stations:
+        if not s.get("lat") or not s.get("lng"):
+            continue
         dist = haversine(lat, lng, s["lat"], s["lng"])
-        if dist < 500:
+        if dist < 1000:
             nearby.append({
                 "id": str(s["id"]),
                 "name": s.get("uzName") or s.get("name", ""),
@@ -39,7 +41,7 @@ async def get_nearby_stops(
                 "lng": s["lng"],
                 "address": s.get("uzName") or s.get("name", ""),
             })
-    return {"stops": nearby[:50]}
+    return {"stops": nearby[:100]}
 
 
 @router.get("/arrivals/{stop_id}")
@@ -131,13 +133,18 @@ async def get_nearby_buses(
 ):
     routes = await three_tm.get_routes()
     buses_list = []
-    for route in routes[:20]:
-        buses = await three_tm.get_route_buses(route["id"])
+    for route in routes[:30]:
+        try:
+            buses = await three_tm.get_route_buses(route["id"])
+        except Exception:
+            continue
         for bus in buses:
             if bus.get("status") != "ON_ROUTE":
                 continue
+            if not bus.get("lat") or not bus.get("lng"):
+                continue
             bl = haversine(lat, lng, bus["lat"], bus["lng"])
-            if bl < 2000:
+            if bl < 3000:
                 buses_list.append({
                     "id": bus.get("busId", ""),
                     "route": str(route["number"]),
