@@ -66,13 +66,14 @@ function updateBusMarkers(buses) {
     var activeIds = {};
     buses.forEach(function(b) {
         activeIds[b.id] = true;
-        var rot = b.direction || 0;
         var iconHtml = '<div style="background:#1565C0;color:#fff;width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold">' + b.route + '</div>';
-        var popupText = '<b>№' + escapeHtml(b.route) + '</b><br/>' + escapeHtml(b.plate) + '<br/>' + escapeHtml(b.busType) + '<br/>' + b.speed + ' km/h<br/><i>' + b.lat.toFixed(4) + ', ' + b.lng.toFixed(4) + '</i>';
+        var popupText = '<b>№' + escapeHtml(b.route) + '</b><br/>' + escapeHtml(b.plate) + '<br/>' + escapeHtml(b.busType) + '<br/>' + b.speed + ' km/h';
         try {
             if (busMarkers[b.id]) {
-                busMarkers[b.id].setLatLng([b.lat, b.lng]);
-                busMarkers[b.id].setPopupContent(popupText);
+                var m = busMarkers[b.id];
+                m.setLatLng([b.lat, b.lng]);
+                m.setPopupContent(popupText);
+                m._busData = b;
             } else {
                 var marker = L.marker([b.lat, b.lng], {
                     icon: L.divIcon({
@@ -82,6 +83,13 @@ function updateBusMarkers(buses) {
                         iconAnchor: [15, 15]
                     })
                 }).addTo(map).bindPopup(popupText);
+                marker._busData = b;
+                marker.on('click', function() {
+                    var d = this._busData;
+                    if (d && window.PayBusBridge) {
+                        PayBusBridge.onBusClick(d.id, d.route, d.lat, d.lng, d.plate, d.busType, d.speed);
+                    }
+                });
                 busMarkers[b.id] = marker;
             }
         } catch(e) { console.log('Bus marker error: ' + e.message); }

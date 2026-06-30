@@ -173,6 +173,19 @@ public class MapFragment extends Fragment {
                 fetchArrivals(stopId, name, address);
             });
         }
+
+        @JavascriptInterface
+        public void onBusClick(final String busId, final String routeId,
+                               final double lat, final double lng,
+                               final String plate, final String busType,
+                               final double speed) {
+            if (getActivity() == null) return;
+            getActivity().runOnUiThread(() -> {
+                selectedRouteId = routeId;
+                selectedRouteName = "№" + routeId + " " + plate;
+                loadBusRouteDetail(routeId, lat, lng);
+            });
+        }
     }
 
     private void startBusRefresh() {
@@ -296,6 +309,10 @@ public class MapFragment extends Fragment {
     }
 
     private void loadRouteSchedule(String routeId) {
+        loadRouteSchedule(routeId, null, 0, 0);
+    }
+
+    private void loadRouteSchedule(String routeId, Double busLat, Double busLng) {
         String token = "Bearer " + session.getToken();
         PayBusApi api = ApiClient.getApi();
         api.getRouteSchedule(token, routeId).enqueue(new Callback<PayBusApi.RouteScheduleResponse>() {
@@ -309,11 +326,27 @@ public class MapFragment extends Fragment {
                     tvRoutePrice.setText(schedule.price + " so'm");
 
                     List<BusStopScheduleAdapter.StopSchedule> stops = new ArrayList<>();
-                    for (PayBusApi.ScheduleStop s : schedule.stops) {
+                    int closestIdx = 0;
+                    double minDist = Double.MAX_VALUE;
+                    for (int i = 0; i < schedule.stops.size(); i++) {
+                        PayBusApi.ScheduleStop s = schedule.stops.get(i);
                         stops.add(new BusStopScheduleAdapter.StopSchedule(
                                 s.stop_id, s.name, s.arrival_time, s.lat, s.lng));
+                        if (busLat != null && busLng != null && s.lat != 0 && s.lng != 0) {
+                            double d = Math.pow(s.lat - busLat, 2) + Math.pow(s.lng - busLng, 2);
+                            if (d < minDist) {
+                                minDist = d;
+                                closestIdx = i;
+                            }
+                        }
                     }
-                    rvRouteStops.setAdapter(new BusStopScheduleAdapter(stops, reminderManager, routeId, schedule.name));
+
+                    BusStopScheduleAdapter adapter = new BusStopScheduleAdapter(
+                            stops, reminderManager, routeId, schedule.name);
+                    if (busLat != null && busLng != null) {
+                        adapter.setCurrentStopIndex(closestIdx);
+                    }
+                    rvRouteStops.setAdapter(adapter);
 
                     hideAllPanels();
                     busRoutePanel.setVisibility(View.VISIBLE);
@@ -327,6 +360,10 @@ public class MapFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void loadBusRouteDetail(String routeId, double busLat, double busLng) {
+        loadRouteSchedule(routeId, busLat, busLng);
     }
 
     private void loadCards() {
@@ -431,8 +468,7 @@ public class MapFragment extends Fragment {
 
         locationPermissionGranted = true;
         CancellationTokenSource cts = new CancellationTokenSource();
-        com.google.android.gms.location.Priority priority = com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
-        fusedLocationClient.getCurrentLocation(priority, cts.getToken())
+        fusedLocationClient.getCurrentLocation(com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY, cts.getToken())
             .addOnSuccessListener(location -> {
                 if (location != null && getContext() != null) {
                     currentLat = location.getLatitude();

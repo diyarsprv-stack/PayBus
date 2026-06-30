@@ -21,6 +21,7 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
     private ReminderManager reminderManager;
     private String routeId;
     private String routeName;
+    private int currentStopIndex = -1;
 
     public static class StopSchedule {
         public String stopId;
@@ -28,6 +29,7 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
         public String arrivalTime;
         public double lat;
         public double lng;
+        public boolean passed;
 
         public StopSchedule(String stopId, String name, String arrivalTime) {
             this.stopId = stopId;
@@ -42,6 +44,11 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
             this.lat = lat;
             this.lng = lng;
         }
+    }
+
+    public void setCurrentStopIndex(int index) {
+        this.currentStopIndex = index;
+        notifyDataSetChanged();
     }
 
     public BusStopScheduleAdapter(List<StopSchedule> stops, ReminderManager reminderManager,
@@ -65,12 +72,45 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
         holder.tvStopName.setText(stop.name);
         holder.tvArrivalTime.setText(stop.arrivalTime);
 
-        if (position == 0) {
-            holder.vDot.setBackgroundResource(R.drawable.dot_start);
-        } else if (position == stops.size() - 1) {
-            holder.vDot.setBackgroundResource(R.drawable.dot_end);
+        if (currentStopIndex >= 0) {
+            if (position < currentStopIndex) {
+                holder.tvStopName.setAlpha(0.5f);
+                holder.tvArrivalTime.setAlpha(0.5f);
+                int gray = holder.itemView.getContext().getResources().getColor(android.R.color.darker_gray);
+                holder.tvStopName.setTextColor(gray);
+                holder.vDot.setBackgroundResource(R.drawable.dot_passed);
+            } else if (position == currentStopIndex) {
+                holder.tvStopName.setAlpha(1f);
+                holder.tvArrivalTime.setAlpha(1f);
+                int green = holder.itemView.getContext().getResources().getColor(android.R.color.holo_green_dark);
+                holder.tvStopName.setTextColor(green);
+                holder.vDot.setBackgroundResource(R.drawable.dot_current);
+            } else {
+                holder.tvStopName.setAlpha(1f);
+                holder.tvArrivalTime.setAlpha(1f);
+                int blue = holder.itemView.getContext().getResources().getColor(android.R.color.black);
+                holder.tvStopName.setTextColor(blue);
+                if (position == stops.size() - 1) {
+                    holder.vDot.setBackgroundResource(R.drawable.dot_end);
+                } else {
+                    holder.vDot.setBackgroundResource(R.drawable.dot_mid);
+                }
+            }
         } else {
-            holder.vDot.setBackgroundResource(R.drawable.dot_mid);
+            if (position == 0) {
+                holder.vDot.setBackgroundResource(R.drawable.dot_start);
+            } else if (position == stops.size() - 1) {
+                holder.vDot.setBackgroundResource(R.drawable.dot_end);
+            } else {
+                holder.vDot.setBackgroundResource(R.drawable.dot_mid);
+            }
+            holder.tvStopName.setAlpha(1f);
+            holder.tvArrivalTime.setAlpha(1f);
+            holder.tvStopName.setTextColor(holder.itemView.getContext().getResources().getColor(android.R.color.black));
+        }
+
+        if (stop.passed) {
+            holder.tvStopName.setAlpha(0.4f);
         }
 
         boolean hasReminder = reminderManager.hasReminder(routeId, stop.stopId);

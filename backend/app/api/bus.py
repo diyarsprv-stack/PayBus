@@ -131,12 +131,15 @@ async def get_nearby_buses(
     lng: float = 69.2401,
     user: User = Depends(get_current_user),
 ):
+    import asyncio
     routes = await three_tm.get_routes()
+    route_slice = routes[:30]
+    tasks = [three_tm.get_route_buses(r["id"]) for r in route_slice]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     buses_list = []
-    for route in routes[:30]:
-        try:
-            buses = await three_tm.get_route_buses(route["id"])
-        except Exception:
+    for i, route in enumerate(route_slice):
+        buses = results[i]
+        if isinstance(buses, Exception):
             continue
         for bus in buses:
             if bus.get("status") != "ON_ROUTE":
