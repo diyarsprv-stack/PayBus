@@ -27,7 +27,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.paybus.R;
 import com.paybus.adapter.BusArrivalAdapter;
@@ -421,29 +423,38 @@ public class MapFragment extends Fragment {
     }
 
     private void moveToCurrentLocation() {
-        if (!locationPermissionGranted) {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission();
             return;
         }
 
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+        locationPermissionGranted = true;
+        CancellationTokenSource cts = new CancellationTokenSource();
+        com.google.android.gms.location.Priority priority = com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY;
+        fusedLocationClient.getCurrentLocation(priority, cts.getToken())
+            .addOnSuccessListener(location -> {
+                if (location != null && getContext() != null) {
+                    currentLat = location.getLatitude();
+                    currentLng = location.getLongitude();
+                    webView.evaluateJavascript("setUserLocation(" + currentLat + ", " + currentLng + ");", null);
+                    fetchNearbyStops(currentLat, currentLng);
+                    fetchNearbyBuses(currentLat, currentLng);
+                } else if (getContext() != null) {
+                    useDefaultLocation();
+                }
+            })
+            .addOnFailureListener(e -> {
+                if (getContext() != null) {
+                    useDefaultLocation();
+                }
+            });
+    }
 
-        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
-            if (location != null) {
-                currentLat = location.getLatitude();
-                currentLng = location.getLongitude();
-                webView.evaluateJavascript("setUserLocation(" + currentLat + ", " + currentLng + ");", null);
-                fetchNearbyStops(currentLat, currentLng);
-                fetchNearbyBuses(currentLat, currentLng);
-            } else {
-                webView.evaluateJavascript("map.setView([41.2995, 69.2401], 13);", null);
-                fetchNearbyStops(41.2995, 69.2401);
-                Toast.makeText(getContext(), "Joylashuv topilmadi, Toshkent markazi ko'rsatilmoqda", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void useDefaultLocation() {
+        webView.evaluateJavascript("map.setView([41.2995, 69.2401], 13);", null);
+        fetchNearbyStops(41.2995, 69.2401);
+        Toast.makeText(getContext(), "Joylashuv topilmadi, Toshkent markazi ko'rsatilmoqda", Toast.LENGTH_SHORT).show();
     }
 
     private void requestLocationPermission() {
@@ -451,8 +462,7 @@ public class MapFragment extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getContext(), "Joylashuvni aniqlash uchun ruxsat kerak", Toast.LENGTH_LONG).show();
         }
-        ActivityCompat.requestPermissions(requireActivity(),
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1001);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1001);
     }
 
     @Override
@@ -474,6 +484,11 @@ public class MapFragment extends Fragment {
             moveToCurrentLocation();
         }
         startBusRefresh();
+    }
+
+    @Override
+    public void onAttach(@NonNull android.content.Context context) {
+        super.onAttach(context);
     }
 
     @Override
