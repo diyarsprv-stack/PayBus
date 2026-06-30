@@ -309,7 +309,7 @@ public class MapFragment extends Fragment {
     }
 
     private void loadRouteSchedule(String routeId) {
-        loadRouteSchedule(routeId, null, 0, 0);
+        loadRouteSchedule(routeId, (Double) null, (Double) null);
     }
 
     private void loadRouteSchedule(String routeId, Double busLat, Double busLng) {
@@ -363,7 +363,7 @@ public class MapFragment extends Fragment {
     }
 
     private void loadBusRouteDetail(String routeId, double busLat, double busLng) {
-        loadRouteSchedule(routeId, busLat, busLng);
+        loadRouteSchedule(routeId, Double.valueOf(busLat), Double.valueOf(busLng));
     }
 
     private void loadCards() {
