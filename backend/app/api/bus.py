@@ -46,21 +46,40 @@ async def get_nearby_stops(
 
 @router.get("/arrivals/{stop_id}")
 async def get_stop_arrivals(stop_id: str, user: User = Depends(get_current_user)):
+    import asyncio
     stations = await three_tm.get_stations()
     station = next((s for s in stations if str(s["id"]) == stop_id), None)
     if not station:
         return {"stop_id": stop_id, "arrivals": []}
 
     routes = await three_tm.get_routes()
+    route_slice = routes[:20]
     stop_lat, stop_lng = station["lat"], station["lng"]
 
-    arrivals = []
-    for route in routes[:20]:
-        detail = await three_tm.get_route_detail(route["id"])
-        route_stations = detail.get("stations") or []
-        if not any(str(rs["id"]) == stop_id for rs in route_stations):
+    detail_tasks = [three_tm.get_route_detail(r["id"]) for r in route_slice]
+    details = await asyncio.gather(*detail_tasks, return_exceptions=True)
+
+    matching = []
+    for i, route in enumerate(route_slice):
+        detail = details[i]
+        if isinstance(detail, Exception):
             continue
-        buses = await three_tm.get_route_buses(route["id"])
+        rs = detail.get("stations") or []
+        if not any(str(s["id"]) == stop_id for s in rs):
+            continue
+        matching.append((route, detail))
+
+    if not matching:
+        return {"stop_id": stop_id, "arrivals": []}
+
+    bus_tasks = [three_tm.get_route_buses(r["id"]) for r, _ in matching]
+    bus_results = await asyncio.gather(*bus_tasks, return_exceptions=True)
+
+    arrivals = []
+    for i, (route, detail) in enumerate(matching):
+        buses = bus_results[i]
+        if isinstance(buses, Exception):
+            continue
         for bus in buses:
             if bus.get("status") != "ON_ROUTE":
                 continue
