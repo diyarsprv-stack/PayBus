@@ -1,11 +1,13 @@
 package com.paybus.adapter;
 
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.paybus.R;
@@ -113,8 +115,12 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
             holder.tvStopName.setAlpha(0.4f);
         }
 
+        int greenColor = ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark);
+        int grayColor = ContextCompat.getColor(holder.itemView.getContext(), com.paybus.R.color.nav_inactive);
+
         boolean hasReminder = reminderManager.hasReminder(routeId, stop.stopId);
         holder.btnRemind.setAlpha(hasReminder ? 1f : 0.4f);
+        holder.btnRemind.setColorFilter(hasReminder ? greenColor : grayColor, PorterDuff.Mode.SRC_IN);
 
         boolean hasAutoPay = false;
         for (ReminderManager.Reminder r : reminderManager.getReminders()) {
@@ -124,10 +130,29 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
             }
         }
         holder.btnAutoPay.setAlpha(hasAutoPay ? 1f : 0.4f);
+        holder.btnAutoPay.setColorFilter(hasAutoPay ? greenColor : grayColor, PorterDuff.Mode.SRC_IN);
 
         holder.btnRemind.setOnClickListener(v -> {
-            reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime);
-            holder.btnRemind.setAlpha(1f);
+            List<ReminderManager.Reminder> all = reminderManager.getReminders();
+            ReminderManager.Reminder existing = null;
+            for (ReminderManager.Reminder r : all) {
+                if (r.routeId.equals(routeId) && r.stopId.equals(stop.stopId)) {
+                    existing = r;
+                    break;
+                }
+            }
+            if (existing != null) {
+                reminderManager.removeReminder(existing.id);
+                holder.btnRemind.setAlpha(0.4f);
+                holder.btnRemind.setColorFilter(grayColor, PorterDuff.Mode.SRC_IN);
+                holder.btnAutoPay.setAlpha(0.4f);
+                holder.btnAutoPay.setColorFilter(grayColor, PorterDuff.Mode.SRC_IN);
+            } else {
+                reminderManager.addReminder(routeId, routeName, stop.stopId, stop.name, stop.arrivalTime,
+                        stop.lat, stop.lng);
+                holder.btnRemind.setAlpha(1f);
+                holder.btnRemind.setColorFilter(greenColor, PorterDuff.Mode.SRC_IN);
+            }
         });
 
         holder.btnAutoPay.setOnClickListener(v -> {
@@ -158,8 +183,12 @@ public class BusStopScheduleAdapter extends RecyclerView.Adapter<BusStopSchedule
                             stop.lat, stop.lng);
                 }
                 holder.btnAutoPay.setAlpha(newState ? 1f : 0.4f);
+                holder.btnAutoPay.setColorFilter(newState ? greenColor : grayColor, PorterDuff.Mode.SRC_IN);
             }
-            holder.btnRemind.setAlpha(1f);
+            if (!reminderManager.hasReminder(routeId, stop.stopId)) {
+                holder.btnRemind.setAlpha(0.4f);
+                holder.btnRemind.setColorFilter(grayColor, PorterDuff.Mode.SRC_IN);
+            }
         });
 
         holder.itemView.setOnClickListener(v -> {

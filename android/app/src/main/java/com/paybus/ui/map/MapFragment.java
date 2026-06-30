@@ -206,15 +206,22 @@ public class MapFragment extends Fragment {
             @Override
             public void onResponse(Call<PayBusApi.NearbyBusesResponse> call,
                                    Response<PayBusApi.NearbyBusesResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().buses != null) {
-                    String json = new com.google.gson.Gson().toJson(response.body().buses);
-                    if (webView != null) {
-                        webView.evaluateJavascript("updateBusMarkers(" + json + ");", null);
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().buses != null && !response.body().buses.isEmpty()) {
+                        String json = new com.google.gson.Gson().toJson(response.body().buses);
+                        if (webView != null) {
+                            webView.evaluateJavascript("updateBusMarkers(" + json + ");", null);
+                        }
                     }
+                } else if (getContext() != null) {
+                    android.util.Log.e("NearbyBuses", "Response not successful: " + response.code() + " " + response.message());
                 }
             }
             @Override
             public void onFailure(Call<PayBusApi.NearbyBusesResponse> call, Throwable t) {
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), "Avtobuslarni yuklashda xatolik: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
